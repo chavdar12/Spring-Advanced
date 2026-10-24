@@ -1,7 +1,7 @@
 package bg.softuni.demo.model.entity;
 
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity

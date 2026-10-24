@@ -14,11 +14,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findById(Long id);
 
-    @Query(value = "SELECT * ,COUNT(*) cnt \n" +
-                   "FROM categories c \n" +
-                   "JOIN advertisements a on c.id = a.category_id \n" +
-                   "GROUP BY c.name \n" +
-                   "ORDER BY cnt DESC \n" +
+    @Query(value = "SELECT c.* " +
+                   "FROM categories c " +
+                   "JOIN advertisements a ON c.id = a.category_id " +
+                   "GROUP BY c.id " +
+                   "ORDER BY COUNT(a.id) DESC " +
                    "LIMIT :count", nativeQuery = true)
     List<Category> findTopOrderedByAdvertisementsCountDesc(@Param("count") Integer count);
 

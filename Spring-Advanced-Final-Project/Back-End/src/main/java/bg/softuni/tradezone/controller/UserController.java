@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -62,8 +63,8 @@ public class UserController {
 
     @PostMapping("/profile/add-favorite")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> addToFavorite(@RequestBody Map<String, Object> requestBody) {
-        String username = String.valueOf(requestBody.get("username"));
+    public ResponseEntity<Void> addToFavorite(@RequestBody Map<String, Object> requestBody, Principal principal) {
+        String username = principal.getName();
         Long addId = Long.parseLong(String.valueOf(requestBody.get("advertisementId")));
         service.addFavorite(username, addId);
         return ok().build();
@@ -71,8 +72,8 @@ public class UserController {
 
     @PostMapping("/profile/remove-favorite")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> removeFavorite(@RequestBody Map<String, Object> requestBody) {
-        String username = String.valueOf(requestBody.get("username"));
+    public ResponseEntity<Void> removeFavorite(@RequestBody Map<String, Object> requestBody, Principal principal) {
+        String username = principal.getName();
         Long addId = Long.parseLong(String.valueOf(requestBody.get("advertisementId")));
         service.removeFavorite(username, addId);
         return ok().build();

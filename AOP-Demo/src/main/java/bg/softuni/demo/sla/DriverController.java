@@ -26,7 +26,7 @@ public class DriverController {
         try {
             Thread.sleep(new Random().nextInt(2000));
         } catch (InterruptedException e) {
-            Thread.interrupted();
+            Thread.currentThread().interrupt();
         }
 
         return ResponseEntity.ok(List.of(

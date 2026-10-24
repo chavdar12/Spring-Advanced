@@ -22,11 +22,11 @@ import bg.softuni.tradezone.service.validation.ProfileUpdateValidationService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
+import bg.softuni.tradezone.error.exception.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final PhotoService photoService;
     private final UserProfileRepository userProfileRepository;
     private final AdvertisementRepository advertisementRepository;
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final ModelMapper mapper;
 
     @Override
@@ -83,7 +83,7 @@ public class ProfileServiceImpl implements ProfileService {
     public Boolean isCompleted(String username) {
 
         return userProfileRepository.findByUserUsername(username)
-                .orElseThrow((EntityNotFoundException::new))
+                .orElseThrow(() -> new EntityNotFoundException(String.format(PROFILE_NOT_FOUND, username)))
                 .getIsCompleted();
     }
 

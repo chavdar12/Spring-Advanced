@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "examples.modifying.enabled", havingValue = "true")
 public class ModifyingAspect {
 
-    @Pointcut("execution(* bg.softuni.aop.Student.concat(..))")
+    @Pointcut("execution(* bg.softuni.demo.Student.concat(..))")
     public void concatPointcut() {
     }
 

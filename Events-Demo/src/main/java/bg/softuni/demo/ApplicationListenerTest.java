@@ -9,7 +9,7 @@ import org.springframework.web.context.support.ServletRequestHandledEvent;
 @Component
 public class ApplicationListenerTest {
 
-    private Logger LOGGER = LoggerFactory.getLogger(ApplicationListenerTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationListenerTest.class);
 
     @EventListener(ServletRequestHandledEvent.class)
     public void onApplicationEvent(ServletRequestHandledEvent event) {

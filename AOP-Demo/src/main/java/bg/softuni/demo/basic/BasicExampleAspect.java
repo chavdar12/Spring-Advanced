@@ -17,11 +17,11 @@ public class BasicExampleAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BasicExampleAspect.class);
 
-    @Pointcut("execution(* bg.softuni.aop.Student.*(..))")
+    @Pointcut("execution(* bg.softuni.demo.Student.*(..))")
     public void track() {
     }
 
-    @Pointcut("execution(* bg.softuni.aop.Student.echo(..))")
+    @Pointcut("execution(* bg.softuni.demo.Student.echo(..))")
     public void trackEcho() {
     }
 

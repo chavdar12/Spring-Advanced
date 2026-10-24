@@ -13,6 +13,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Optional<Role> findByName(RoleName name);
 
-    List<Role> findAllByNameNotLike(RoleName name);
+    List<Role> findAllByNameNot(RoleName name);
 }
 

@@ -15,11 +15,11 @@ import bg.softuni.tradezone.service.validation.PhotoValidationService;
 import com.cloudinary.Uploader;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,25 +44,26 @@ public class PhotoServiceImpl implements PhotoService {
     public PhotoServiceModel upload(String imageContent) {
 
         if (!validationService.isValid(imageContent)) {
-            throw new IllegalArgumentException();
+            throw new PhotoNotValidException(FAIL);
         }
 
-        Pair<String, String> cloudUploadData = uploadToCloud(imageContent);
-
-        PhotoServiceModel photoServiceModel = new PhotoServiceModel();
-        photoServiceModel.setUrl(cloudUploadData.getLeft());
-        photoServiceModel.setIdInCloud(cloudUploadData.getRight());
-
-        return photoServiceModel;
+        return uploadToCloud(imageContent);
     }
 
     @Override
     public PhotoServiceModel upload(MultipartFile multipartFile) {
-        Pair<String, String> cloudUploadData = uploadToCloud(multipartFile);
-        PhotoServiceModel photoServiceModel = new PhotoServiceModel();
-        photoServiceModel.setUrl(cloudUploadData.getLeft());
-        photoServiceModel.setIdInCloud(cloudUploadData.getRight());
-        return photoServiceModel;
+        File file = null;
+        try {
+            file = File.createTempFile("temp-file", multipartFile.getOriginalFilename());
+            multipartFile.transferTo(file);
+            return uploadToCloud(file);
+        } catch (IOException e) {
+            throw new PhotoNotValidException(FAIL);
+        } finally {
+            if (file != null) {
+                file.delete();
+            }
+        }
     }
 
     @Override
@@ -84,11 +85,7 @@ public class PhotoServiceImpl implements PhotoService {
         List<Photo> photos = new ArrayList<>();
 
         for (String content : model.getImages()) {
-            Pair<String, String> cloudUploadData = uploadToCloud(content);
-            Photo photo = new Photo();
-            photo.setUrl(cloudUploadData.getLeft());
-            photo.setIdInCloud(cloudUploadData.getRight());
-            photos.add(photo);
+            photos.add(mapper.map(uploadToCloud(content), Photo.class));
         }
 
         advertisement.getPhotos().addAll(photos);
@@ -126,33 +123,21 @@ public class PhotoServiceImpl implements PhotoService {
         }
     }
 
-    private Pair<String, String> uploadToCloud(String content) {
+    @SuppressWarnings("unchecked")
+    private PhotoServiceModel uploadToCloud(Object content) {
 
-        Map<String, String> uploadedData;
+        Map<String, Object> uploadedData;
 
         try {
             uploadedData = uploader.upload(content, new HashMap<>());
-        } catch (Exception ignored) {
-            uploadedData = null;
+        } catch (Exception e) {
+            throw new PhotoNotValidException(FAIL);
         }
 
         //cloud works this way
-        return Pair.of(uploadedData.get("url"), uploadedData.get("public_id"));
-    }
-
-    private Pair<String, String> uploadToCloud(MultipartFile multipartFile) {
-
-        Map<String, String> uploadedData;
-
-        try {
-            File file = File.createTempFile("temp-file", multipartFile.getOriginalFilename());
-            multipartFile.transferTo(file);
-            uploadedData = uploader.upload(file, new HashMap());
-        } catch (Exception ex) {
-            uploadedData = null;
-        }
-
-        //cloud works this way
-        return Pair.of(uploadedData.get("url"), uploadedData.get("public_id"));
+        PhotoServiceModel photoServiceModel = new PhotoServiceModel();
+        photoServiceModel.setUrl(String.valueOf(uploadedData.get("url")));
+        photoServiceModel.setIdInCloud(String.valueOf(uploadedData.get("public_id")));
+        return photoServiceModel;
     }
 }

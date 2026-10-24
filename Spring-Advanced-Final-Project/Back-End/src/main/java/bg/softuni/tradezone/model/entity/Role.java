@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

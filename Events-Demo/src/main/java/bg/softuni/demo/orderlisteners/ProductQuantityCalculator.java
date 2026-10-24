@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductQuantityCalculator {
 
-    private Logger LOGGER = LoggerFactory.getLogger(ProductQuantityCalculator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductQuantityCalculator.class);
 
     @EventListener(OrderCreatedEvent.class)
     public void onOrderCreated(OrderCreatedEvent orderCreatedEvent) {

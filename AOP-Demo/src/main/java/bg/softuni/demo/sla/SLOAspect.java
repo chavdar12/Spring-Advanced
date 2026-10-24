@@ -23,9 +23,9 @@ public class SLOAspect {
         this.slosConfig = slosConfig;
     }
 
-    @Around(value = "@annotation(TrackLatency)")
-    public Object trackLatency(ProceedingJoinPoint pjp, TrackLatency TrackLatency) throws Throwable {
-        String latencyId = TrackLatency.latency();
+    @Around(value = "@annotation(trackLatency)")
+    public Object trackLatency(ProceedingJoinPoint pjp, TrackLatency trackLatency) throws Throwable {
+        String latencyId = trackLatency.latency();
         SLOConfig config = slosConfig
                 .getSlos()
                 .stream()

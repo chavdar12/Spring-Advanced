@@ -249,7 +249,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         }
 
         Advertisement advertisement = advertisementRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(ADV_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ADV_NOT_FOUND, id)));
 
         UserProfile profile = userProfileRepository.findByUserUsername(update.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException(String.format(PROFILE_NOT_FOUND, update.getUsername())));
@@ -274,7 +274,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         }
 
         Advertisement advertisement = advertisementRepository.findById(request.getAdvertisementId())
-                .orElseThrow(() -> new EntityNotFoundException(ADV_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ADV_NOT_FOUND, request.getAdvertisementId())));
 
         if (advertisement.getPhotos().stream().noneMatch(x -> x.getId().equals(request.getPhotoId()))) {
             throw new EntityNotFoundException(ADV_IMG_NOT_PRESENT);

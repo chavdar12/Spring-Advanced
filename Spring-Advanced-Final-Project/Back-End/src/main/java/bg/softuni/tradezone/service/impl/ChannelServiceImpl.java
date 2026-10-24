@@ -52,9 +52,9 @@ public class ChannelServiceImpl implements ChannelService {
 
         profile.getSubscribedTo().add(channel);
 
-        profile = userProfileRepository.save(profile);
+        userProfileRepository.save(profile);
 
-        return mapper.map(profile.getSubscribedTo().stream().filter(x -> x.getId().equals(channel.getId())).findFirst(), ChannelServiceModel.class);
+        return mapper.map(channel, ChannelServiceModel.class);
     }
 
     @Override

@@ -55,7 +55,8 @@ public class AdvertisementController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> create(@RequestBody AdvertisementCreateModel restModel) {
+    public ResponseEntity<Void> create(@RequestBody AdvertisementCreateModel restModel, Principal principal) {
+        restModel.setCreator(principal.getName());
         advertisementService.create(restModel);
         return ok().build();
     }
@@ -69,7 +70,8 @@ public class AdvertisementController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Void> editConfirm(@RequestBody AdvertisementEditedModel editedModel) {
+    public ResponseEntity<Void> editConfirm(@RequestBody AdvertisementEditedModel editedModel, Principal principal) {
+        editedModel.setCreator(principal.getName());
         advertisementService.edit(editedModel);
         return ok().build();
     }
@@ -106,13 +108,15 @@ public class AdvertisementController {
     }
 
     @DeleteMapping("/delete-image")
-    public ResponseEntity<Void> deletePhoto(DeleteAdvImageRequest deleteRequest) {
+    public ResponseEntity<Void> deletePhoto(DeleteAdvImageRequest deleteRequest, Principal principal) {
+        deleteRequest.setUsername(principal.getName());
         advertisementService.deletePhoto(deleteRequest);
         return ok().build();
     }
 
     @PatchMapping("/upload-images")
-    public ResponseEntity<Void> uploadPhotos(@RequestBody ImagesToUploadModel images) {
+    public ResponseEntity<Void> uploadPhotos(@RequestBody ImagesToUploadModel images, Principal principal) {
+        images.setUsername(principal.getName());
         photoService.uploadAdvertisementPhotos(images);
         return ok().build();
     }

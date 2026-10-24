@@ -9,8 +9,10 @@ import bg.softuni.demo.repository.StudentsRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class StudentsController {
 
     @GetMapping("/{id}/orders")
     public ResponseEntity<CollectionModel<EntityModel<OrderDTO>>> getOrders(@PathVariable("id") Long id) {
-        StudentEntity student = studentsRepository.findById(id).orElseThrow();
+        StudentEntity student = studentsRepository.findById(id).orElseThrow(StudentsController::notFound);
 
         List<EntityModel<OrderDTO>> orders = student
                 .getOrders()
@@ -69,15 +71,19 @@ public class StudentsController {
         StudentDTO student = studentsRepository
                 .findById(id)
                 .map(studentMapper::mapEntityToDTO)
-                .orElseThrow();
+                .orElseThrow(StudentsController::notFound);
 
         return ResponseEntity.ok(EntityModel.of(student, createStudentLinks(student)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<StudentDTO>> update(@PathVariable Long id,
-                                                          StudentDTO studentDTO) {
+                                                          @RequestBody StudentDTO studentDTO) {
         return ResponseEntity.ok().build();
+    }
+
+    private static ResponseStatusException notFound() {
+        return new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     private Link[] createStudentLinks(StudentDTO studentDTO) {

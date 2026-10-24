@@ -5,6 +5,6 @@ examples:
 slos-config:
   slos:
     - id: local_operation
-      treshold: 60
+      threshold: 60
     - id: remote_operation
-      treshold: 500
+      threshold: 500

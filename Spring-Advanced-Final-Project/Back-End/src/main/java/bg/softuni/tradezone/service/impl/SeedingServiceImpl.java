@@ -16,19 +16,20 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
 public class SeedingServiceImpl implements SeedingService {
 
-    private static final String TOWNS_JSON_PATH = "C:\\Users\\chavd\\Documents\\Repos\\softuni-project\\trade-zone\\src\\main\\resources\\static\\json\\towns.json";
+    private static final String TOWNS_JSON_PATH = "static/json/towns.json";
 
-    private static final String REGIONS_JSON_PATH = "C:\\Users\\chavd\\Documents\\Repos\\softuni-project\\trade-zone\\src\\main\\resources\\static\\json\\regions.json";
+    private static final String REGIONS_JSON_PATH = "static/json/regions.json";
 
     private static final Type CITY_LIST_TYPE = new TypeToken<List<TownBindingModel>>() {
     }.getType();
 
-    private static final Type REGION_LIST_TYPE = new TypeToken<List<Region>>() {
+    private static final Type REGION_LIST_TYPE = new TypeToken<List<Map<String, String>>>() {
     }.getType();
 
     private final RegionRepository regionRepository;
@@ -49,8 +50,12 @@ public class SeedingServiceImpl implements SeedingService {
 
     private void seedRegions() {
         String regionsAsString = fileUtil.fileContent(REGIONS_JSON_PATH);
-        List<Region> regions = gson.fromJson(regionsAsString, REGION_LIST_TYPE);
-        regionRepository.saveAll(regions);
+        List<Map<String, String>> regions = gson.fromJson(regionsAsString, REGION_LIST_TYPE);
+        regionRepository.saveAll(regions.stream().map(r -> {
+            Region region = new Region();
+            region.setName(r.get("name"));
+            return region;
+        }).toList());
     }
 
     private void seedTowns() {
@@ -65,6 +70,10 @@ public class SeedingServiceImpl implements SeedingService {
             Town entity = mapper.map(town, Town.class);
             Region region = regionRepository.findByName(town.getRegion()).orElse(null);
             entity.setRegion(region);
+            if (region != null) {
+                // keep the inverse side in sync: the same persistence context serves the request that triggered seeding
+                region.getTowns().add(entity);
+            }
             entities.add(entity);
         }
 

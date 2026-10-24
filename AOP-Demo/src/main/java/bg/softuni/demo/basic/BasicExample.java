@@ -22,8 +22,8 @@ public class BasicExample implements CommandLineRunner {
         student.concat("A", "B");
         try {
             student.boom();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (IllegalStateException expected) {
+            // the @AfterThrowing advice already logged it; rethrowing would crash application startup
         }
     }
 }

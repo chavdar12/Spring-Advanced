@@ -36,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleServiceModel> getAllExceptRoot() {
-        return roleRepository.findAllByNameNotLike(RoleName.ROLE_ROOT).stream()
+        return roleRepository.findAllByNameNot(RoleName.ROLE_ROOT).stream()
                 .map(x -> mapper.map(x, RoleServiceModel.class))
                 .collect(Collectors.toList());
     }

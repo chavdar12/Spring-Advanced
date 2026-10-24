@@ -1,36 +1,21 @@
 package bg.softuni.tradezone.utils;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class FileUtilImpl implements FileUtil {
 
     @Override
-    public String fileContent(String path) {
-
-        StringBuilder sb = new StringBuilder();
-
-        File file = new File(path);
-
-        String line;
-
+    public String fileContent(String classpathLocation) {
         try {
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append(System.lineSeparator());
-            }
-
-            return sb.toString().trim();
-
-        } catch (Exception e) {
-            return null;
+            return new ClassPathResource(classpathLocation).getContentAsString(StandardCharsets.UTF_8).trim();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot read " + classpathLocation, e);
         }
     }
 }

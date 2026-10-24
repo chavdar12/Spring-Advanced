@@ -18,7 +18,7 @@ public class AdvertisementValidationService implements ValidationService<Adverti
 
     private boolean fieldsArePresent(AdvertisementBaseModel model) {
         return model.getCreator() != null && model.getCondition() != null && model.getCategory() != null
-               && model.getDescription() != null && model.getPrice() != null && model.getTitle() != null;
+               && model.getDelivery() != null && model.getDescription() != null && model.getPrice() != null && model.getTitle() != null;
     }
 
     private boolean fieldsAreValid(AdvertisementBaseModel advertisement) {
@@ -27,7 +27,8 @@ public class AdvertisementValidationService implements ValidationService<Adverti
             return false;
         }
 
-        if (isCreateModel(advertisement) && hasNoImages(advertisement)) {
+        if (advertisement instanceof AdvertisementCreateModel createModel
+            && (createModel.getImages() == null || createModel.getImages().length < 1)) {
             return false;
         }
 
@@ -41,16 +42,4 @@ public class AdvertisementValidationService implements ValidationService<Adverti
         return true;
     }
 
-    private boolean isCreateModel(AdvertisementBaseModel advertisement) {
-
-        String className = advertisement.getClass().getSimpleName();
-
-        return className.equals("AdvertisementCreateModel");
-    }
-
-    private boolean hasNoImages(AdvertisementBaseModel advertisement) {
-
-        return ((AdvertisementCreateModel) advertisement).getImages() == null
-               || ((AdvertisementCreateModel) advertisement).getImages().length < 1;
-    }
 }
