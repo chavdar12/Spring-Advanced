@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<h1 th:text="${product.name}">Product</h1>
+<p th:text="|In stock: ${product.stock}|">In stock</p>
+<form th:action="@{/products/{id}/buy(id=${product.id})}" method="post">
+    <button>Buy</button>
+</form>
+</body>
+</html>

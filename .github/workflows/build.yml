@@ -11,13 +11,30 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - 001-Web-API-And-REST-Controllers
+          - 002-Exercise-Web-API-And-REST-Controllers
+          - 003-Spring-Security
+          - 004-HATEOAS
+          - 005-Error-Handling
+          - 006-Events
+          - 007-AOP
+          - 008-Unit-And-Integration-Testing
+          - 009-Containerization-And-Documentation
+          - 010-Deployment-Hosting-And-Monitoring
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
 
       - uses: gradle/actions/setup-gradle@v6
 
@@ -28,5 +45,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-reports
-          path: '**/build/reports/tests/'
+          name: test-reports-${{ matrix.project }}
+          path: ${{ matrix.project }}/build/reports/tests/

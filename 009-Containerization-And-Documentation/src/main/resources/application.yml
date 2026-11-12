@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:courses
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+# Used by compose.yaml: the app talks to the MySQL container.
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/courses?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
