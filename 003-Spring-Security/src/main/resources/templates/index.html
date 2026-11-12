@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Security</title>
+</head>
+<body>
+<nav th:replace="~{layout :: nav}"></nav>
+<h1 sec:authorize="isAnonymous()">Hello, guest!</h1>
+<h1 sec:authorize="isAuthenticated()">Hello, <span sec:authentication="name">user</span>!</h1>
+<p sec:authorize="hasRole('ADMIN')">This content is only shown to administrators.</p>
+</body>
+</html>

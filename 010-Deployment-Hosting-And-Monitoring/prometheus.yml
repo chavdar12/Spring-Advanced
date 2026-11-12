@@ -1,0 +1,10 @@
+# Run Prometheus with this file, then open http://localhost:9090 and query e.g. greetings_total or http_server_requests_seconds_count
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'spring-app'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8080']

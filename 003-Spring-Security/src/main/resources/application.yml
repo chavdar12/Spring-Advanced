@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:security
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+app:
+  # demo values; override with APP_ADMIN_PASSWORD / APP_REMEMBER_ME_KEY outside of local development
+  admin-password: ${APP_ADMIN_PASSWORD:admin12345}
+  remember-me-key: ${APP_REMEMBER_ME_KEY:change-me-remember-me-key}

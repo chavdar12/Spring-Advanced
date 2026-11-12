@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<button id="loadBooks">LOAD ALL BOOKS</button>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Isbn</th>
+        <th>Tags</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="books"></tbody>
+</table>
+
+<form id="bookForm">
+    <h3 id="formTitle">FORM</h3>
+    <label for="title">TITLE</label>
+    <input type="text" id="title" placeholder="Title..." required>
+    <label for="author">AUTHOR</label>
+    <input type="text" id="author" placeholder="Author..." required>
+    <label for="isbn">ISBN</label>
+    <input type="text" id="isbn" placeholder="Isbn..." required>
+    <label for="tags">TAGS</label>
+    <input type="text" id="tags" placeholder="fantasy, classic...">
+    <button id="submit">Submit</button>
+    <button id="cancel" type="button" hidden>Cancel</button>
+</form>
+<script src="./app.js"></script>
+</body>
+</html>

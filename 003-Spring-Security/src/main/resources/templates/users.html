@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<nav th:replace="~{layout :: nav}"></nav>
+<h1>Users</h1>
+<ul>
+    <li th:each="username : ${usernames}">
+        <span th:text="${username}">name</span>
+        <form th:action="@{/admin/users/{u}/delete(u=${username})}" method="post" style="display: inline">
+            <button>Delete</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

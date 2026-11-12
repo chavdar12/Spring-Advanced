@@ -1,0 +1,21 @@
+server:
+  # hosting platforms (Heroku, Render, Fly.io...) hand the port over in the PORT environment variable
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # never expose "*" in production: env, beans, heapdump... leak internals
+        include: health, info, metrics, prometheus, custom
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Spring Advanced - Monitoring demo
+    description: Actuator, Micrometer and Prometheus
